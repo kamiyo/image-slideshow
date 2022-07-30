@@ -1,0 +1,45 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "lib": [
+            "dom",
+            "esnext"
+        ],
+        "paths": {
+            "*": [
+                "node_modules/*",
+                "node_modules/@types/*",
+                "@types/*",
+                "app/*"
+            ]
+        },
+        "typeRoots": [
+            "node_modules/@types",
+            "@types"
+        ],
+        "types": [
+            "bluebird-global"
+        ],
+        "module": "commonjs",
+        "target": "esnext",
+        "jsx": "preserve",
+        "allowJs": true,
+        "moduleResolution": "node",
+        "strict": true,
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "sourceMap": false,
+        "skipLibCheck": true,
+        "outDir": "build",
+        "baseUrl": "."
+    },
+    "exclude": [
+        "**/node_modules/*"
+    ],
+    "include": [
+        "./app/src"
+    ]
+}

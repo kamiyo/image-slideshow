@@ -1,0 +1,103 @@
+@tailwind base;
+
+@layer base {
+    @font-face {
+        font-family: "Exo 2";
+        src: url(/app/assets/fonts/Exo2-VariableFont_wght.ttf) format("truetype") tech("variations");
+        src: url(/app/assets/fonts/Exo2-VariableFont_wght.ttf) format("truetype-variations");
+        font-weight: 100 900;
+    }
+    @font-face {
+        font-family: "Exo 2";
+        src: url(/app/assets/fonts/Exo2-Italic-VariableFont_wght.ttf) format("truetype") tech("variations");
+        src: url(/app/assets/fonts/Exo2-Italic-VariableFont_wght.ttf) format("truetype-variations");
+        font-weight: 100 900;
+        font-style: italic;
+    }
+    html {
+        @apply h-full;
+        @apply overflow-hidden;
+    }
+
+    body {
+        @apply h-full;
+        @apply bg-black;
+    }
+
+    #app {
+        @apply h-full;
+    }
+
+    .text-white-glow {
+        @apply text-white;
+        text-shadow: 0px 0px 2px #ffffff54, 0px 0px 2px #ffffff54, 0px 0px 2px #ffffff54;
+        transition: text-shadow 250ms ease-out;
+    }
+
+    .text-white-hover {
+        @apply text-white;
+        text-shadow: 0px 0px 4px #ffffff70, 0px 0px 4px #ffffff70, 0px 0px 4px #ffffff70,
+                     0px 0px 4px #ffffff70, 0px 0px 4px #ffffff70, 0px 0px 4px #ffffff70;
+
+    }
+
+    .drop-white-glow {
+        filter: drop-shadow(0px 0px 2px #ffffff54) drop-shadow(0px 0px 2px #ffffff54) drop-shadow(0px 0px 2px #ffffff54);
+        transition: filter 250ms ease-out;
+    }
+
+    .drop-white-glow:hover {
+        filter: drop-shadow(0px 0px 4px #ffffff70) drop-shadow(0px 0px 4px #ffffff70) drop-shadow(0px 0px 4px #ffffff70)
+                drop-shadow(0px 0px 4px #ffffff70) drop-shadow(0px 0px 4px #ffffff70) drop-shadow(0px 0px 4px #ffffff70);
+    }
+
+    .segmented-active-hover {
+        @apply text-black;
+    }
+
+    .ui-gradient {
+        background-image:
+            linear-gradient(to bottom,
+                rgba(0 0 0 / 0.4) 0px 48px,
+                rgba(0 0 0 / 0) 96px calc(100vh - 108px),
+                rgba(0 0 0 / 0.4) calc(100vh - 60px));
+    }
+}
+
+@tailwind components;
+
+@layer components {
+    .fullscreen-button {
+        @apply drop-white-glow absolute bottom-0 right-0 m-5 hover:cursor-pointer;
+    }
+
+    .play-pause-button {
+        @apply drop-white-glow m-auto hover:cursor-pointer;
+    }
+}
+
+.loading-enter, .loading-exit-done, .canvas-enter, .ui-layer-enter, .ui-layer-exit-done {
+    @apply opacity-0;
+}
+
+.loading-enter-active, .canvas-enter-active, .ui-layer-enter-active {
+    @apply opacity-100;
+    @apply transition-opacity;
+    transition-duration: 250ms
+}
+
+.loading-exit, .canvas-exit, .canvas-enter-done, .ui-layer-exit, .ui-layer-enter-done {
+    @apply opacity-100;
+}
+
+.loading-exit-active, .canvas-exit-active, .ui-layer-exit-active {
+    @apply opacity-0;
+    @apply transition-opacity;
+    transition-duration: 250ms
+}
+
+.ui-layer-enter-active, .ui-layer-exit-active {
+    transition-duration: 500ms
+}
+
+@tailwind utilities;

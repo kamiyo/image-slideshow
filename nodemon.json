@@ -1,0 +1,12 @@
+{
+    "exec": "yarn ts-node server/src/index.ts",
+    "watch": [
+        "web/src/",
+        "app/src/"
+    ],
+    "env": {
+        "NODE_ENV": "development"
+    },
+    "ext": "ts,tsx,html",
+    "delay": 1000
+}
