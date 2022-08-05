@@ -342,35 +342,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/core@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "@mantine/core@npm:5.0.0"
+"@mantine/core@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "@mantine/core@npm:5.0.2"
   dependencies:
     "@floating-ui/react-dom-interactions": 0.6.6
-    "@mantine/styles": 5.0.0
-    "@mantine/utils": 5.0.0
+    "@mantine/styles": 5.0.2
+    "@mantine/utils": 5.0.2
     "@radix-ui/react-scroll-area": 1.0.0
     react-textarea-autosize: 8.3.4
   peerDependencies:
-    "@mantine/hooks": 5.0.0
+    "@mantine/hooks": 5.0.2
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 6764790f26905dffc687555de419c1d8afd789da1e44119440134f54e4d35ba3ef847aa25ae4cca3d2d5c30ad23c0d8ad8ffe7e17fc0395aff4fb74cf71d7065
+  checksum: 3677995cb6b31481b29ee56096ba9366d68062fb9e636e271685a2e0ec7df852231edbe111aded6b02e7ddf2c6abc20f6c6aead42a30d130d8687540406dcedd
   languageName: node
   linkType: hard
 
-"@mantine/hooks@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "@mantine/hooks@npm:5.0.0"
+"@mantine/hooks@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "@mantine/hooks@npm:5.0.2"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: b51cfe24f8a61b718949d7d22d5d836ed29fa4ba9f360ffc9139161901affb503443d92170a7bf692acb0cb0bfcd65377afc67058fc7ca86c90e75860ac0cd57
+  checksum: 792b2ce59bc5a3bfb14e3f12762eaeb1e9b7edf080d03e2515c68ddd6b54fb6923e9c6461e5bd1030c043801f241f09be15bae5d6236b58a4206203a4d0166c6
   languageName: node
   linkType: hard
 
-"@mantine/styles@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@mantine/styles@npm:5.0.0"
+"@mantine/styles@npm:5.0.2":
+  version: 5.0.2
+  resolution: "@mantine/styles@npm:5.0.2"
   dependencies:
     clsx: 1.1.1
     csstype: 3.0.9
@@ -378,16 +378,16 @@ __metadata:
     "@emotion/react": ">=11.9.0"
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 1dbf6548a58334fe130a2f7e72b2d447f40ff47d660f29b0656317cc6f94055f6bc6f6282a33b84009351c363a6d0c58c373ed294f68756e7cc48b53f2d51e74
+  checksum: a602c1453007d52c2d779e3ff107b26f6072158c3d9ffda4be42276bdccfff4b7695cb48f41ead0aacd42af97d40d61b61b022c530200c60f8cf3db711721bee
   languageName: node
   linkType: hard
 
-"@mantine/utils@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@mantine/utils@npm:5.0.0"
+"@mantine/utils@npm:5.0.2":
+  version: 5.0.2
+  resolution: "@mantine/utils@npm:5.0.2"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 7d167dd40e02e6f2cb830ede1aad091af7bf9eb42fa1b47a08451286e98d3fa1a88f49a3e179d7969be450f70fc3d02f9851b8655d310499fa6bc431978ed232
+  checksum: fe618eb37c8f900ea2ed7ba25a95c01d55a9cc6d3e82ee46d36446258e52a8828098a5d8bd0c53ca269bb876cffd4c8162110715da7e912f552a99b1f2f5ba22
   languageName: node
   linkType: hard
 
@@ -3438,6 +3438,60 @@ __metadata:
   languageName: node
   linkType: hard
 
+"image-slideshow@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "image-slideshow@workspace:."
+  dependencies:
+    "@emotion/cache": ^11.9.3
+    "@emotion/core": ^11.0.0
+    "@emotion/react": ^11.9.3
+    "@emotion/serialize": ^1.0.4
+    "@emotion/utils": ^1.1.0
+    "@mantine/core": ^5.0.2
+    "@mantine/hooks": ^5.0.2
+    "@swc/core": ^1.2.212
+    "@types/bluebird": ^3.5.36
+    "@types/dotenv": ^8.2.0
+    "@types/express": ^4.17.13
+    "@types/morgan": ^1.9.3
+    "@types/node": ^18.6.2
+    "@types/react": ^18.0.15
+    "@types/react-dom": ^18.0.6
+    "@types/react-transition-group": ^4.4.5
+    "@types/sharp": ^0.30.4
+    app-root-path: ^3.0.0
+    autoprefixer: ^10.4.7
+    bluebird: ^3.7.2
+    clean-webpack-plugin: ^4.0.0
+    commit-and-tag-version: ^10.0.1
+    core-js: ^3.23.4
+    css-loader: ^6.7.1
+    dotenv: ^16.0.1
+    express: ^4.18.1
+    file-loader: ^6.2.0
+    gsap: ^3.10.4
+    html-webpack-plugin: ^5.5.0
+    morgan: ^1.10.0
+    nodemon: ^2.0.19
+    postcss: ^8.4.14
+    postcss-loader: ^7.0.1
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    react-spinners: ^0.13.3
+    react-transition-group: ^4.4.2
+    regenerator-runtime: ^0.13.9
+    sharp: ^0.30.7
+    style-loader: ^3.3.1
+    svg-gear-generator: ^1.1.5
+    swc-loader: ^0.2.3
+    tailwindcss: ^3.1.6
+    ts-node: ^10.8.2
+    typescript: ^4.7.4
+    webpack: ^5.73.0
+    webpack-cli: ^4.10.0
+  languageName: unknown
+  linkType: soft
+
 "import-fresh@npm:^3.2.1":
   version: 3.3.0
   resolution: "import-fresh@npm:3.3.0"
@@ -4986,59 +5040,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"random-zoom@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "random-zoom@workspace:."
-  dependencies:
-    "@emotion/cache": ^11.9.3
-    "@emotion/core": ^11.0.0
-    "@emotion/react": ^11.9.3
-    "@emotion/serialize": ^1.0.4
-    "@emotion/utils": ^1.1.0
-    "@mantine/core": ^5.0.0
-    "@mantine/hooks": ^5.0.0
-    "@swc/core": ^1.2.212
-    "@types/bluebird": ^3.5.36
-    "@types/dotenv": ^8.2.0
-    "@types/express": ^4.17.13
-    "@types/morgan": ^1.9.3
-    "@types/node": ^18.6.2
-    "@types/react": ^18.0.15
-    "@types/react-dom": ^18.0.6
-    "@types/react-transition-group": ^4.4.5
-    "@types/sharp": ^0.30.4
-    app-root-path: ^3.0.0
-    autoprefixer: ^10.4.7
-    bluebird: ^3.7.2
-    clean-webpack-plugin: ^4.0.0
-    commit-and-tag-version: ^10.0.1
-    core-js: ^3.23.4
-    css-loader: ^6.7.1
-    dotenv: ^16.0.1
-    express: ^4.18.1
-    file-loader: ^6.2.0
-    gsap: ^3.10.4
-    html-webpack-plugin: ^5.5.0
-    morgan: ^1.10.0
-    nodemon: ^2.0.19
-    postcss: ^8.4.14
-    postcss-loader: ^7.0.1
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    react-spinners: ^0.13.3
-    react-transition-group: ^4.4.2
-    regenerator-runtime: ^0.13.9
-    sharp: ^0.30.7
-    style-loader: ^3.3.1
-    swc-loader: ^0.2.3
-    tailwindcss: ^3.1.6
-    ts-node: ^10.8.2
-    typescript: ^4.7.4
-    webpack: ^5.73.0
-    webpack-cli: ^4.10.0
-  languageName: unknown
-  linkType: soft
-
 "randombytes@npm:^2.1.0":
   version: 2.1.0
   resolution: "randombytes@npm:2.1.0"
@@ -5846,6 +5847,21 @@ __metadata:
   version: 1.0.0
   resolution: "supports-preserve-symlinks-flag@npm:1.0.0"
   checksum: 53b1e247e68e05db7b3808b99b892bd36fb096e6fba213a06da7fab22045e97597db425c724f2bbd6c99a3c295e1e73f3e4de78592289f38431049e1277ca0ae
+  languageName: node
+  linkType: hard
+
+"svg-gear-generator@npm:^1.1.5":
+  version: 1.1.5
+  resolution: "svg-gear-generator@npm:1.1.5"
+  dependencies:
+    "@types/react": ^18.0.15
+    react: ^18.2.0
+  dependenciesMeta:
+    "@types/react":
+      optional: true
+    react:
+      optional: true
+  checksum: fac215daef63bd756ecefc68efe38403b6707d0616f98dbf80208d6b6b050f3eb00bca383dade816b4f19afcd13adda5d4813c4747d489d66f29d456b1e1e462
   languageName: node
   linkType: hard
 

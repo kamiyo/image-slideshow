@@ -84,9 +84,20 @@ interface SlideshowProps {
     isPlaying: boolean;
     setBounds: React.Dispatch<React.SetStateAction<Pick<RenderParams, 'sx' | 'sy' | 'sw' | 'sh'> | undefined>>;
     slideshowInterval: number;
+    zoomActivated: boolean;
+    isCover: boolean;
 }
 
-export const Slideshow: React.FC<SlideshowProps> = ({ setCurrentImageName, v, setV, isPlaying, setBounds, slideshowInterval }) => {
+export const Slideshow: React.FC<SlideshowProps> = ({
+    setCurrentImageName,
+    v,
+    setV,
+    isPlaying,
+    setBounds,
+    slideshowInterval,
+    isCover,
+    zoomActivated,
+}) => {
     const imageMap = React.useRef<HTMLImageElement[]>([]);
     const resolvers = React.useRef<(() => void)[]>([]);
     const promises = React.useRef<Bluebird<void>[]>([]);
@@ -114,29 +125,20 @@ export const Slideshow: React.FC<SlideshowProps> = ({ setCurrentImageName, v, se
         asyncFetch();
     }, []);
 
+        // Setup and populate map of promises/resolvers as well as first two images
     React.useEffect(() => {
-        // if there are timerIds, then it has been playing
-        if (timerIds.current.length !== 0) {
-            // clear all timers
-            timerIds.current.forEach((timerId) => clearTimeout(timerId));
-            timerIds.current = [];
-        } else {
-            // don't activate timers unless we actually have images (was playing previous to pausing)
-            imageSources.length && timerIds.current.push(
-                setTimeout(() => {
-                    timerIds.current.splice(0, 1);
-                    timerFn();
-                }, slideshowInterval * 1000)
-            );
+        // don't do anything if nothing in sources yet
+        if (imageSources.length === 0) {
+            return;
         }
-    }, [isPlaying, imageSources]);
-
-    // Setup and populate map of promises/resolvers as well as first two images
-    React.useEffect(() => {
         images.current = [
             getRandomInt(0, imageSources.length),
             getRandomInt(0, imageSources.length)
         ];
+        while (images.current[0] === images.current[1]) {
+            // prevent two of the same image
+            images.current[1] = getRandomInt(0, imageSources.length);
+        }
         for (let i = 0; i < imageSources.length; i++) {
             promises.current[i] = new Bluebird<void>((res) => {
                 resolvers.current[i] = res;
@@ -150,8 +152,6 @@ export const Slideshow: React.FC<SlideshowProps> = ({ setCurrentImageName, v, se
             imageKey,
             canvasNumber,
             refresh = false,
-            randomZoom = false,
-            objectFit = 'cover',
         } = params;
         const canvas = canvases.current[canvasNumber];
         const image = imageMap.current[imageKey];
@@ -165,10 +165,9 @@ export const Slideshow: React.FC<SlideshowProps> = ({ setCurrentImageName, v, se
             canvas.height = height;
 
             const destRatio = width / height;               // ratio of canvas
-            const srcRatio = image.width / image.height;    // ratio of source image
 
             // If image is smaller in either dimension than canvas
-            if (image.width <= width || image.height <= height || randomZoom === false) {
+            if (image.width <= width || image.height <= height || zoomActivated === false) {
                 let sw = image.width;
                 let sh = image.height;
 
@@ -178,7 +177,7 @@ export const Slideshow: React.FC<SlideshowProps> = ({ setCurrentImageName, v, se
                     dh = height,
                     out: RenderParams;
 
-                if (objectFit === 'cover') {
+                if (isCover) {
                     // the factor that the canvas needs to be scaled to fit the source
                     // for calculating sx and sy
                     const scaleFactor = Math.min(
@@ -243,7 +242,7 @@ export const Slideshow: React.FC<SlideshowProps> = ({ setCurrentImageName, v, se
             };
             renderParams.current[canvasNumber] = out;
         }
-    }, []);
+    }, [isCover, zoomActivated]);
 
     // Store state into ref (maybe we don't need this)
     React.useEffect(() => {
@@ -251,6 +250,50 @@ export const Slideshow: React.FC<SlideshowProps> = ({ setCurrentImageName, v, se
         imageSources.length && setCurrentImageName(imageSources[images.current[currentCanvas]].name);
         setBounds(renderParams.current[currentCanvas] ?? undefined);
     }, [currentCanvas, imageSources]);
+
+    const wrappedDraw = React.useCallback(async () => {
+        setV((prev) => prev + 1);
+    }, []);
+
+    React.useEffect(() => {
+        window.addEventListener('resize', wrappedDraw);
+        return () => {
+            window.removeEventListener('resize', wrappedDraw);
+        };
+    }, [wrappedDraw]);
+
+    const loadAndDrawImage = React.useCallback((linkNumber: number, canvasNumber: Canvases, opacity = 1.0) => {
+        if (imageMap.current[linkNumber] === undefined) {
+            imageMap.current[linkNumber] = new Image();
+            imageMap.current[linkNumber]!.addEventListener('load', () => {
+                generateRenderParams({
+                    imageKey: linkNumber,
+                    canvasNumber,
+                });
+                drawImage({
+                    image: imageMap.current[linkNumber]!,
+                    canvas: canvases.current[canvasNumber],
+                    renderParams: renderParams.current[canvasNumber],
+                    opacity
+                });
+                resolvers.current?.[linkNumber]!();
+            }, false);
+            imageMap.current[linkNumber]!.src = imageSourcesRef.current[linkNumber].url;
+        } else {
+            promises.current?.[linkNumber]!.then(() => {
+                generateRenderParams({
+                    imageKey: linkNumber,
+                    canvasNumber,
+                });
+                drawImage({
+                    image: imageMap.current[linkNumber]!,
+                    canvas: canvases.current[canvasNumber],
+                    renderParams: renderParams.current[canvasNumber],
+                    opacity
+                });
+            });
+        }
+    }, [generateRenderParams]);
 
     // I think we have to use refs here because timerFn doesn't have a chance to be updated by hooks
     // Main timer loop
@@ -262,9 +305,13 @@ export const Slideshow: React.FC<SlideshowProps> = ({ setCurrentImageName, v, se
         timerIds.current.push(
             setTimeout(() => {
                 timerIds.current.splice(0, 1);
-                const nextImage = getRandomInt(0, imageSourcesRef.current.length);
+                const currentImage = images.current[incrementMod2(lastCanvas)];
+                let nextImage;
+                do {
+                    nextImage = getRandomInt(0, imageSourcesRef.current.length);
+                } while (nextImage === currentImage);
                 images.current[lastCanvas] = nextImage;
-                canvases.current[lastCanvas] && loadAndDrawImage(nextImage, lastCanvas, true, fade1.current.t);
+                canvases.current[lastCanvas] && loadAndDrawImage(nextImage, lastCanvas, fade1.current.t);
             }, 1000)
         );
         timerIds.current.push(
@@ -275,7 +322,39 @@ export const Slideshow: React.FC<SlideshowProps> = ({ setCurrentImageName, v, se
                 timerFn();
             }, slideshowInterval * 1000)
         );
-    }, [slideshowInterval, setCurrentCanvas]);
+    }, [setCurrentCanvas, loadAndDrawImage, slideshowInterval]);
+
+    React.useEffect(() => {
+        // if there are timerIds and it was playing
+        if (timerIds.current.length !== 0) {
+            // clear all timers
+            timerIds.current.forEach((timerId) => clearTimeout(timerId));
+            timerIds.current = [];
+        }
+
+        if (isPlaying) {
+            // don't activate timers unless we actually have images (was playing previous to pausing)
+            imageSources.length && timerIds.current.push(
+                setTimeout(() => {
+                    timerIds.current.splice(0, 1);
+                    timerFn();
+                }, slideshowInterval * 1000)
+            );
+        }
+
+    }, [isPlaying, imageSources, slideshowInterval]);
+
+    const drawCanvas = React.useCallback((canvasNumber: Canvases) => () => {
+        const canvas = canvases.current[canvasNumber];
+        drawImage({
+            image: imageMap.current[images.current[canvasNumber]]!,
+            canvas,
+            renderParams: renderParams.current[canvasNumber],
+            opacity: (canvasNumber === 0) ? fade1.current.t : undefined
+        });
+    }, []);
+
+    const drawCanvas1 = React.useCallback(drawCanvas(0), []);
 
     React.useEffect(() => {
         // reset loading
@@ -288,7 +367,7 @@ export const Slideshow: React.FC<SlideshowProps> = ({ setCurrentImageName, v, se
 
         const asyncInner = async () => {
             const currentImage = images.current[0];
-            loadAndDrawImage(currentImage, 0, true, fade1.current.t);
+            loadAndDrawImage(currentImage, 0, fade1.current.t);
             await promises.current?.[currentImage];
             timerIds.current.push(
                 setTimeout(() => {
@@ -302,70 +381,14 @@ export const Slideshow: React.FC<SlideshowProps> = ({ setCurrentImageName, v, se
                             timerFn();
                         }, slideshowInterval * 1000)
                     );
-                }, 3000)
+                }, 0)
             );
             const nextImage = images.current[1];
-            loadAndDrawImage(nextImage, 1, true);
+            loadAndDrawImage(nextImage, 1);
         };
 
         imageSources.length && asyncInner();
-    }, [v, imageSources]);
-
-    const wrappedDraw = React.useCallback(async () => {
-        setV((prev) => prev + 1);
-    }, []);
-
-    React.useEffect(() => {
-        window.addEventListener('resize', wrappedDraw);
-        return () => {
-            window.removeEventListener('resize', wrappedDraw);
-        };
-    }, [wrappedDraw]);
-
-    const loadAndDrawImage = React.useCallback((linkNumber: number, canvasNumber: Canvases, generateParams = false, opacity = 1.0) => {
-        if (imageMap.current[linkNumber] === undefined) {
-            imageMap.current[linkNumber] = new Image();
-            imageMap.current[linkNumber]!.addEventListener('load', () => {
-                generateParams && generateRenderParams({
-                    imageKey: linkNumber,
-                    canvasNumber
-                });
-                drawImage({
-                    image: imageMap.current[linkNumber]!,
-                    canvas: canvases.current[canvasNumber],
-                    renderParams: renderParams.current[canvasNumber],
-                    opacity
-                });
-                resolvers.current?.[linkNumber]!();
-            }, false);
-            imageMap.current[linkNumber]!.src = imageSourcesRef.current[linkNumber].url;
-        } else {
-            promises.current?.[linkNumber]!.then(() => {
-                generateParams && generateRenderParams({
-                    imageKey: linkNumber,
-                    canvasNumber
-                });
-                drawImage({
-                    image: imageMap.current[linkNumber]!,
-                    canvas: canvases.current[canvasNumber],
-                    renderParams: renderParams.current[canvasNumber],
-                    opacity
-                });
-            });
-        }
-    }, []);
-
-    const drawCanvas = React.useCallback((canvasNumber: Canvases) => () => {
-        const canvas = canvases.current[canvasNumber];
-        drawImage({
-            image: imageMap.current[images.current[canvasNumber]]!,
-            canvas,
-            renderParams: renderParams.current[canvasNumber],
-            opacity: (canvasNumber === 0) ? fade1.current.t : undefined
-        });
-    }, []);
-
-    const drawCanvas1 = React.useCallback(drawCanvas(0), []);
+    }, [v, zoomActivated, isCover, imageSources, loadAndDrawImage]);
 
     return (
         <div className="w-full h-full bg-black">
