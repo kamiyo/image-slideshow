@@ -403,7 +403,6 @@ export const App: React.FC<{}> = () => {
                                             Maximum
                                         </Grid.Col>
                                         <Grid.Col span={16}>
-                                            <Space h="sm" />
                                         </Grid.Col>
                                     </Grid>
                                 </div>
