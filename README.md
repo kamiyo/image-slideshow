@@ -8,7 +8,18 @@ This repository allows you to serve a website that is an image slideshow. This w
 
 Build with `yarn build`, and then serve the output dist statically.
 
-You will need to serve a JSON of the images with type `{ name: string; url: string }[]`, currently hardcoded in the app.
+You will need to serve a JSON of the images with type
+```
+{
+    name: string;
+    url?: string;
+    urls?: {
+        hires: string;
+        normal: string;
+    };
+}[]
+```
+the resource of which is currently hardcoded in the app.
 
 ## Settings
 

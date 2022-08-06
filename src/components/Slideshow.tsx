@@ -149,9 +149,6 @@ export const Slideshow: React.FC<SlideshowProps> = ({
 
     React.useEffect(() => {
         // don't do anything if nothing in sources yet or if quality not selected yet
-        if (imageSources.length === 0 || maxQuality === undefined) {
-            return;
-        }
         imageMap.current = [];
         for (let i = 0; i < imageSources.length; i++) {
             promises.current[i] = new Bluebird<void>((res) => {
@@ -260,7 +257,6 @@ export const Slideshow: React.FC<SlideshowProps> = ({
 
     // Store state into ref (maybe we don't need this)
     React.useEffect(() => {
-        console.log(currentCanvas, images.current, imageSources);
         currentCanvasRef.current = currentCanvas;
         imageSources.length && setCurrentImageName(imageSources[images.current[currentCanvas]].name);
         setBounds(renderParams.current[currentCanvas] ?? undefined);
@@ -404,7 +400,7 @@ export const Slideshow: React.FC<SlideshowProps> = ({
             loadAndDrawImage(nextImage, 1);
         };
 
-        imageSources.length && asyncInner();
+        imageSources.length && (maxQuality !== undefined) && asyncInner();
     }, [v, zoomActivated, isCover, imageSources, loadAndDrawImage, maxQuality]);
 
     return (

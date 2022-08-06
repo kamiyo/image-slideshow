@@ -44,8 +44,6 @@ export const App: React.FC<{}> = () => {
     const gearRef = React.useRef<SVGSVGElement | null>(null);
     const settingsOpenedRef = React.useRef(false);
 
-    console.log(maxQuality);
-
     React.useEffect(() => {
         (maxQuality !== undefined) && window.localStorage.setItem(
             'maxQuality',
