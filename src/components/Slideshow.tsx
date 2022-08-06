@@ -1,12 +1,16 @@
 import * as React from 'react';
-import * as Bluebird from 'bluebird';
+import Bluebird from 'bluebird';
 import { PuffLoader } from 'react-spinners';
 import { CSSTransition, Transition } from 'react-transition-group';
 import gsap from 'gsap';
 
 interface LinkShape {
     name: string;
-    url: string;
+    url?: string;
+    urls?: {
+        hires: string;
+        normal: string;
+    }
 }
 type Canvases = 0 | 1;
 
@@ -86,6 +90,7 @@ interface SlideshowProps {
     slideshowInterval: number;
     zoomActivated: boolean;
     isCover: boolean;
+    maxQuality?: boolean;
 }
 
 export const Slideshow: React.FC<SlideshowProps> = ({
@@ -97,6 +102,7 @@ export const Slideshow: React.FC<SlideshowProps> = ({
     slideshowInterval,
     isCover,
     zoomActivated,
+    maxQuality,
 }) => {
     const imageMap = React.useRef<HTMLImageElement[]>([]);
     const resolvers = React.useRef<(() => void)[]>([]);
@@ -125,9 +131,9 @@ export const Slideshow: React.FC<SlideshowProps> = ({
         asyncFetch();
     }, []);
 
-        // Setup and populate map of promises/resolvers as well as first two images
+    // Setup and populate map of promises/resolvers as well as first two images
     React.useEffect(() => {
-        // don't do anything if nothing in sources yet
+    // don't do anything if nothing in sources yet or if quality not selected yet
         if (imageSources.length === 0) {
             return;
         }
@@ -139,12 +145,20 @@ export const Slideshow: React.FC<SlideshowProps> = ({
             // prevent two of the same image
             images.current[1] = getRandomInt(0, imageSources.length);
         }
+    }, [imageSources]);
+
+    React.useEffect(() => {
+        // don't do anything if nothing in sources yet or if quality not selected yet
+        if (imageSources.length === 0 || maxQuality === undefined) {
+            return;
+        }
+        imageMap.current = [];
         for (let i = 0; i < imageSources.length; i++) {
             promises.current[i] = new Bluebird<void>((res) => {
                 resolvers.current[i] = res;
             });
         }
-    }, [imageSources]);
+    }, [imageSources, maxQuality]);
 
     // generate the bounds of source and dest
     const generateRenderParams = React.useCallback(async (params: RenderParamsArgs) => {
@@ -246,6 +260,7 @@ export const Slideshow: React.FC<SlideshowProps> = ({
 
     // Store state into ref (maybe we don't need this)
     React.useEffect(() => {
+        console.log(currentCanvas, images.current, imageSources);
         currentCanvasRef.current = currentCanvas;
         imageSources.length && setCurrentImageName(imageSources[images.current[currentCanvas]].name);
         setBounds(renderParams.current[currentCanvas] ?? undefined);
@@ -278,7 +293,9 @@ export const Slideshow: React.FC<SlideshowProps> = ({
                 });
                 resolvers.current?.[linkNumber]!();
             }, false);
-            imageMap.current[linkNumber]!.src = imageSourcesRef.current[linkNumber].url;
+            imageMap.current[linkNumber]!.src = maxQuality
+                ? (imageSourcesRef.current[linkNumber].urls?.hires || imageSourcesRef.current[linkNumber].url!)
+                : (imageSourcesRef.current[linkNumber].urls?.normal || imageSourcesRef.current[linkNumber].url!);
         } else {
             promises.current?.[linkNumber]!.then(() => {
                 generateRenderParams({
@@ -293,7 +310,7 @@ export const Slideshow: React.FC<SlideshowProps> = ({
                 });
             });
         }
-    }, [generateRenderParams]);
+    }, [generateRenderParams, maxQuality]);
 
     // I think we have to use refs here because timerFn doesn't have a chance to be updated by hooks
     // Main timer loop
@@ -381,14 +398,14 @@ export const Slideshow: React.FC<SlideshowProps> = ({
                             timerFn();
                         }, slideshowInterval * 1000)
                     );
-                }, 0)
+                }, 100)
             );
             const nextImage = images.current[1];
             loadAndDrawImage(nextImage, 1);
         };
 
         imageSources.length && asyncInner();
-    }, [v, zoomActivated, isCover, imageSources, loadAndDrawImage]);
+    }, [v, zoomActivated, isCover, imageSources, loadAndDrawImage, maxQuality]);
 
     return (
         <div className="w-full h-full bg-black">

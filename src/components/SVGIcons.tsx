@@ -33,6 +33,22 @@ export const Pause: React.FC<React.SVGAttributes<SVGElement>> = (props) => {
     );
 };
 
+export const Minus: React.FC<React.SVGAttributes<SVGElement>> = (props) => {
+    return (
+        <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="-72 -72 144 144">
+            <path d="M-64 0H64" strokeWidth={16} shapeRendering="geometricPrecision" />
+        </svg>
+    );
+};
+
+export const Plus: React.FC<React.SVGAttributes<SVGElement>> = (props) => {
+    return (
+        <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="-72 -72 144 144">
+            <path d="M-64 0H64M0 -64V64" strokeWidth={16} shapeRendering="geometricPrecision" />
+        </svg>
+    );
+};
+
 export const Settings = React.forwardRef<SVGSVGElement, React.SVGAttributes<SVGElement>>((props, ref) => {
     return (
         <svg ref={ref} {...props} xmlns="http://www.w3.org/2000/svg" viewBox="-72 -72 144 144">

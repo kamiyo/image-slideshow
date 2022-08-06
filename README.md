@@ -19,17 +19,9 @@ In the app, there are four settings.
 * Auto-Hide Info - The UI goes away after a period of inactivity of the mouse. Toggling this off will keep the image information and bounds persisting.
 
 ## Development
-server:
 ```
 yarn dev
 ```
-
-app:
-```
-yarn watch
-```
-
-The backend is just a development server. Included is also an endpoint to grab the picture and crop it for download, but that isn't used currently. Will remove in a later commit.
 
 ## License
 

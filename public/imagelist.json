@@ -1,31 +1,52 @@
 [
     {
-        "name": "SMACS 0723",
-        "url": "https://stsci-opo.org/STScI-01G8H15R2PGEXQD7TYYBFJ3FT4.png"
+        "name": "SMACS 0723 (NIRCam)",
+        "urls": {
+            "hires": "https://stsci-opo.org/STScI-01G8H15R2PGEXQD7TYYBFJ3FT4.png",
+            "normal": "https://stsci-opo.org/STScI-01G8H1NK4W8CJYHF2DDFD1W0DQ.png"
+        }
     },
     {
         "name": "NGC 3324 \"Cosmic Cliffs\" in Carina Nebula (NIRCam)",
-        "url": "https://stsci-opo.org/STScI-01G8GX1KMWX2XA4PK2EWM7KE3R.png"
+        "urls": {
+            "hires": "https://stsci-opo.org/STScI-01G8GX1KMWX2XA4PK2EWM7KE3R.png",
+            "normal": "https://stsci-opo.org/STScI-01G8GX6MG9VC1BVR5NRK8C660A.png"
+        }
     },
     {
         "name": "NGC 3324 \"Cosmic Cliffs\" in Carina Nebula (MIRI & NIRCam Composite)",
-        "url": "https://stsci-opo.org/STScI-01G8GYD8B1H306SSPR4MY6NGN0.png"
+        "urls": {
+            "hires": "https://stsci-opo.org/STScI-01G8GYD8B1H306SSPR4MY6NGN0.png",
+            "normal": "https://stsci-opo.org/STScI-01G8GYE2PQWY96TDX66CHQRMPQ.png"
+        }
     },
     {
         "name": "Stephan's Quintet (MIRI)",
-        "url": "https://stsci-opo.org/STScI-01G8H5BZ9P60BS78J4004Z90GW.png"
+        "urls": {
+            "hires": "https://stsci-opo.org/STScI-01G8H5BZ9P60BS78J4004Z90GW.png",
+            "normal": "https://stsci-opo.org/STScI-01G8H5CE7DEAX7EPB9WAYZWXWG.png"
+        }
     },
     {
         "name": "Stephan's Quintet (MIRI & NIRCam Composite)",
-        "url": "https://stsci-opo.org/STScI-01G8H49RQ0E48YDM8WKW9PP5XS.png"
+        "urls": {
+            "hires": "https://stsci-opo.org/STScI-01G8H49RQ0E48YDM8WKW9PP5XS.png",
+            "normal": "https://stsci-opo.org/STScI-01G8H4DRM2C010PX6T3DPEEDAW.png"
+        }
     },
     {
         "name": "Stephan's Quintet (NIRCam)",
-        "url": "https://stsci-opo.org/STScI-01G8H4G9N06NRW9FX8J88GNDT6.png"
+        "urls": {
+            "hires": "https://stsci-opo.org/STScI-01G8H4G9N06NRW9FX8J88GNDT6.png",
+            "normal": "https://stsci-opo.org/STScI-01G8H4J1VZA2SY8B7QY9D25CFG.png"
+        }
     },
     {
         "name": "NGC 3132 Southern Ring Nebula (NIRCam)",
-        "url": "https://stsci-opo.org/STScI-01G8GZQ3ZFJRD8YF8YZWMAXCE3.png"
+        "urls": {
+            "hires": "https://stsci-opo.org/STScI-01G8GZQ3ZFJRD8YF8YZWMAXCE3.png",
+            "normal": "https://stsci-opo.org/STScI-01G8GZR18A6CBS9TGJS8JE9CM4.png"
+        }
     },
     {
         "name": "NGC 3132 Southern Ring Nebula (MIRI)",
@@ -33,7 +54,10 @@
     },
     {
         "name": "Cartwheel Galaxy (NIRCam)",
-        "url": "https://stsci-opo.org/STScI-01G9G4KWCB7CHGD6Z1A26G9CVT.png"
+        "urls": {
+            "hires": "https://stsci-opo.org/STScI-01G9G4KWCB7CHGD6Z1A26G9CVT.png",
+            "normal": "https://stsci-opo.org/STScI-01G9G4MMNR3YD0BAM1VAQ2WS1G.png"
+        }
     },
     {
         "name": "Cartwheel Galaxy (MIRI)",
@@ -41,6 +65,9 @@
     },
     {
         "name": "Cartwheel Galaxy (MIRI & NIRCam Composite)",
-        "url": "https://stsci-opo.org/STScI-01G9G4J23CDPVNGCYDJRZTTJQN.png"
+        "urls": {
+            "hires": "https://stsci-opo.org/STScI-01G9G4J23CDPVNGCYDJRZTTJQN.png",
+            "normal": "https://stsci-opo.org/STScI-01G9G4JP4VZ0R9CZHWQ3AMAR0G.png"
+        }
     }
 ]

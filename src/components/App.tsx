@@ -1,9 +1,10 @@
 import { RenderParams, Slideshow } from './Slideshow'
 import * as React from 'react';
+import useMedia from 'use-media';
 import { CSSTransition, SwitchTransition, Transition } from 'react-transition-group';
 import gsap from 'gsap';
-import { Popover, Grid, Switch, Divider, Slider } from '@mantine/core';
-import { ExitFullScreen, FullScreen, Github, Pause, Play, Settings } from './SVGIcons';
+import { Popover, Grid, Switch, Divider, Slider, Modal, Button, Space } from '@mantine/core';
+import { ExitFullScreen, FullScreen, Github, Minus, Pause, Play, Plus, Settings } from './SVGIcons';
 import { storageAvailable } from '../utils/localStorage';
 
 const formatBounds = (bounds: Pick<RenderParams, 'sx' | 'sy' | 'sw' | 'sh'>) => {
@@ -12,6 +13,7 @@ const formatBounds = (bounds: Pick<RenderParams, 'sx' | 'sy' | 'sw' | 'sh'>) => 
 };
 
 export const App: React.FC<{}> = () => {
+    const isCompact = useMedia({ maxWidth: '62rem' });
     const [mouseMoved, setMouseMoved] = React.useState(true);
     const [currentImageName, setCurrentImageName] = React.useState('');
     const [v, setV] = React.useState(0);        // Force child rerendering
@@ -32,7 +34,24 @@ export const App: React.FC<{}> = () => {
     const [hideInfo, setHideInfo] = React.useState(
         storageAvailable() ? window.localStorage.getItem('hideInfo') === 'true' : false
     );
+    const [maxQuality, setMaxQuality] = React.useState(
+        storageAvailable() ? (
+            window.localStorage.getItem('maxQuality') === null ?
+                undefined
+                : window.localStorage.getItem('maxQuality') === 'true'
+        ) : undefined
+    );
     const gearRef = React.useRef<SVGSVGElement | null>(null);
+    const settingsOpenedRef = React.useRef(false);
+
+    console.log(maxQuality);
+
+    React.useEffect(() => {
+        (maxQuality !== undefined) && window.localStorage.setItem(
+            'maxQuality',
+            maxQuality.toString()
+        );
+    }, [maxQuality]);
 
     React.useEffect(() => {
         window.localStorage.setItem(
@@ -70,6 +89,8 @@ export const App: React.FC<{}> = () => {
     }, [slideshowInterval]);
 
     React.useEffect(() => {
+        settingsOpenedRef.current = settingsOpened;
+        clearTimeout(timerId.current);
         if (settingsOpened) {
             gsap.to(gearRef.current, {
                 rotate: 360,
@@ -92,7 +113,7 @@ export const App: React.FC<{}> = () => {
             setMouseMoved(true);
             document.getElementById('app')!.style.cursor = 'unset';
             clearTimeout(timerId.current);
-            if ((ev.target as HTMLElement).id === 'ui') {
+            if ((ev.target as HTMLElement).id === 'ui' && !settingsOpenedRef.current) {
                 timerId.current = setTimeout(() => {
                     if (document.fullscreenElement) {
                         document.getElementById('app')!.style.cursor = 'none';
@@ -121,6 +142,35 @@ export const App: React.FC<{}> = () => {
 
     return (
         <>
+            <Modal
+                opened={maxQuality === undefined}
+                withCloseButton={false}
+                onClose={() => { }}
+                centered
+                classNames={{
+                    modal: 'border border-white bg-transparent'
+                }}
+            >
+                <div className="text-white">Select Image Quality</div>
+                <Divider />
+                <Space h="md" />
+                <div className="my-2 flex flex-row justify-evenly">
+                    <Button
+                        className="quality-button"
+                        onClick={() => setMaxQuality(false)}
+                    >Standard</Button>
+                    <Button
+                        className="quality-button"
+                        onClick={() => setMaxQuality(true)}
+                    >Maximum</Button>
+                </div>
+                <Space h="md" />
+                <div className="text-white font-light">
+                    Maximum requires high bandwidth and memory requirements.
+                    Choose Standard if on a mobile device.
+                    You can adjust this later in the settings.
+                </div>
+            </Modal>
             <CSSTransition
                 in={mouseMoved}
                 timeout={500}
@@ -190,132 +240,170 @@ export const App: React.FC<{}> = () => {
                                 />
                         }
                     </div>
-                    <div className="m-2 text-4xl font-thin absolute z-20 text-white-glow">
+                    <div className="mt-2 ml-4 text-4xl font-thin absolute z-20 text-white-glow">
                         JWST Slideshow
                     </div>
                     <div className="m-4 absolute z-20 right-0 top-0 flex flex-row">
-                    <Popover
-                        width={400}
-                        position="left-start"
-                        withArrow
-                        shadow="md"
-                        arrowOffset={12}
-                        arrowSize={10}
-                        opened={settingsOpened}
-                        onChange={setSettingsOpened}
-                    >
-                        <Popover.Target>
-                            <div
-                                className="mx-2"
-                                onMouseOver={() => {
-                                    setTimeout(() => clearTimeout(timerId.current), 150);
-                                }}
-                                onClick={() => {
-                                    setSettingsOpened((o) => !o);
-                                }}
-                            >
-                                <Settings
-                                    ref={gearRef}
-                                    className="settings-button"
-                                    stroke="white"
-                                    fill="transparent"
-                                    width="32"
-                                    height="32"
-                                />
-                            </div>
-                        </Popover.Target>
-                        <Popover.Dropdown
-                            className="border border-white text-white settings"
+                        <Popover
+                            width={isCompact ? '100vw' : '400px'}
+                            position={isCompact ? 'bottom-end' : 'left-start'}
+                            withArrow
+                            shadow="md"
+                            arrowOffset={isCompact ? 82 : 12}
+                            arrowSize={10}
+                            opened={settingsOpened}
+                            onChange={setSettingsOpened}
                         >
-                            <div className="opacity-80">
-                                <Grid columns={16}>
-                                    <Grid.Col span={16}>
-                                        Settings
-                                    </Grid.Col>
-                                    <Grid.Col span={16}>
-                                        <Divider className="!m-0" />
-                                    </Grid.Col>
-                                    <Grid.Col span={16} className="flex items-center">
-                                        Slideshow Interval:
-                                    </Grid.Col>
-                                    <Grid.Col span={16} className="">
-                                        <Slider
-                                            value={slideshowInterval}
-                                            onChange={setSlideShowInterval}
-                                            min={5}
-                                            max={60}
-                                            label={(value: number) => value.toFixed(1)}
-                                            step={1}
-                                            classNames={{
-                                                bar: 'bg-white',
-                                                track: 'before:bg-transparent before:border-white before:border',
-                                                thumb: 'border-white bg-black border-2',
-                                                root: 'outline-none'
-                                            }}
-                                        />
-                                    </Grid.Col>
-                                    <Grid.Col span={6}>
-                                        Zoom
-                                    </Grid.Col>
-                                    <Grid.Col span={3} className="font-thin text-right">
-                                        Off
-                                    </Grid.Col>
-                                    <Grid.Col span={4}>
-                                        <div className="flex justify-center">
-                                            <Switch
-                                                classNames={{
-                                                    input: 'switch-input'
-                                                }}
-                                                className="hover:cursor-pointer"
-                                                size="md"
-                                                checked={zoomActivated}
-                                                onChange={(ev: React.FormEvent<HTMLInputElement>) => setZoomActivated(ev.currentTarget?.checked)} />
-                                        </div>
-                                    </Grid.Col>
-                                    <Grid.Col span={3} className="font-thin text-left">
-                                        On
-                                    </Grid.Col>
-                                    <Grid.Col span={6}>
-                                        Image Fit
-                                    </Grid.Col>
-                                    <Grid.Col span={3} className="font-thin text-right">
-                                        Contain
-                                    </Grid.Col>
-                                    <Grid.Col span={4}>
-                                        <div className="flex justify-center">
-                                            <Switch
-                                                classNames={{
-                                                    input: 'switch-input'
-                                                }}
-                                                className="hover:cursor-pointer"
-                                                size="md"
-                                                checked={isCover}
-                                                onChange={(ev: React.FormEvent<HTMLInputElement>) => setIsCover(ev.currentTarget?.checked)} />
-                                        </div>
-                                    </Grid.Col>
-                                    <Grid.Col span={3} className="font-thin text-left">
-                                        Cover
-                                    </Grid.Col>
-                                    <Grid.Col span={6}>
-                                        Auto-Hide Info
-                                    </Grid.Col>
-                                    <Grid.Col span={3} className="font-thin text-right">
-                                        Off
-                                    </Grid.Col>
-                                    <Grid.Col span={4}>
-                                        <div className="flex justify-center">
-                                            <Switch
-                                                classNames={{
-                                                    input: 'switch-input'
-                                                }}
-                                                className="hover:cursor-pointer"
-                                                size="md"
-                                                checked={hideInfo}
-                                                onChange={(ev: React.FormEvent<HTMLInputElement>) => setHideInfo(ev.currentTarget?.checked)} />
-                                        </div>
-                                    </Grid.Col>
-                                    <Grid.Col span={3} className="font-thin text-left">
-                                        On
+                            <Popover.Target>
+                                <div
+                                    className="mx-2"
+                                    onMouseOver={() => {
+                                        setTimeout(() => clearTimeout(timerId.current), 150);
+                                    }}
+                                    onClick={() => {
+                                        setSettingsOpened((o) => !o);
+                                    }}
+                                >
+                                    <Settings
+                                        ref={gearRef}
+                                        className="settings-button"
+                                        stroke="white"
+                                        fill="transparent"
+                                        width="32"
+                                        height="32"
+                                    />
+                                </div>
+                            </Popover.Target>
+                            <Popover.Dropdown
+                                className="border border-white text-white settings"
+                            >
+                                <div className="opacity-80">
+                                    <Grid columns={16}>
+                                        <Grid.Col span={16}>
+                                            Settings
+                                        </Grid.Col>
+                                        <Grid.Col span={16}>
+                                            <Divider className="!m-0" />
+                                        </Grid.Col>
+                                        <Grid.Col span={16} className="flex items-center">
+                                            Slideshow Interval: {slideshowInterval}s
+                                        </Grid.Col>
+                                        <Grid.Col span={16} className="flex items-center justify-between">
+                                            <div
+                                                className="hover:cursor-pointer settings-button"
+                                                onClick={() => setSlideShowInterval((p) => p - 1)}
+                                            >
+                                                <Minus height="16" width="16" stroke="white" fill="none" />
+                                            </div>
+                                            <div className="w-4/5">
+                                                <Slider
+                                                    value={slideshowInterval}
+                                                    onChange={setSlideShowInterval}
+                                                    min={5}
+                                                    max={60}
+                                                    label={null}
+                                                    step={1}
+                                                    classNames={{
+                                                        bar: 'bg-white',
+                                                        track: 'before:bg-transparent before:border-white before:border',
+                                                        thumb: 'border-white bg-black border-2',
+                                                        root: 'outline-none'
+                                                    }}
+                                                />
+                                            </div>
+                                            <div
+                                                className="hover:cursor-pointer settings-button"
+                                                onClick={() => setSlideShowInterval((p) => p + 1)}
+                                            >
+                                                <Plus height="16" width="16" stroke="white" fill="none" />
+                                            </div>
+                                        </Grid.Col>
+                                        <Grid.Col span={6}>
+                                            Random Zoom
+                                        </Grid.Col>
+                                        <Grid.Col span={3} className="font-thin text-right">
+                                            Off
+                                        </Grid.Col>
+                                        <Grid.Col span={3}>
+                                            <div className="flex justify-center">
+                                                <Switch
+                                                    classNames={{
+                                                        input: 'switch-input'
+                                                    }}
+                                                    className="hover:cursor-pointer"
+                                                    size="md"
+                                                    checked={zoomActivated}
+                                                    onChange={(ev: React.FormEvent<HTMLInputElement>) => setZoomActivated(ev.currentTarget?.checked)} />
+                                            </div>
+                                        </Grid.Col>
+                                        <Grid.Col span={4} className="font-thin text-left">
+                                            On
+                                        </Grid.Col>
+                                        <Grid.Col span={6}>
+                                            Image Fit
+                                        </Grid.Col>
+                                        <Grid.Col span={3} className="font-thin text-right">
+                                            Contain
+                                        </Grid.Col>
+                                        <Grid.Col span={3}>
+                                            <div className="flex justify-center">
+                                                <Switch
+                                                    classNames={{
+                                                        input: 'switch-input'
+                                                    }}
+                                                    className="hover:cursor-pointer"
+                                                    size="md"
+                                                    checked={isCover}
+                                                    onChange={(ev: React.FormEvent<HTMLInputElement>) => setIsCover(ev.currentTarget?.checked)} />
+                                            </div>
+                                        </Grid.Col>
+                                        <Grid.Col span={4} className="font-thin text-left">
+                                            Cover
+                                        </Grid.Col>
+                                        <Grid.Col span={6}>
+                                            Auto-Hide Info
+                                        </Grid.Col>
+                                        <Grid.Col span={3} className="font-thin text-right">
+                                            Off
+                                        </Grid.Col>
+                                        <Grid.Col span={3}>
+                                            <div className="flex justify-center">
+                                                <Switch
+                                                    classNames={{
+                                                        input: 'switch-input'
+                                                    }}
+                                                    className="hover:cursor-pointer"
+                                                    size="md"
+                                                    checked={hideInfo}
+                                                    onChange={(ev: React.FormEvent<HTMLInputElement>) => setHideInfo(ev.currentTarget?.checked)} />
+                                            </div>
+                                        </Grid.Col>
+                                        <Grid.Col span={4} className="font-thin text-left">
+                                            On
+                                        </Grid.Col>
+                                        <Grid.Col span={6}>
+                                            Image Quality
+                                        </Grid.Col>
+                                        <Grid.Col span={3} className="font-thin text-right">
+                                            Standard
+                                        </Grid.Col>
+                                        <Grid.Col span={3}>
+                                            <div className="flex justify-center">
+                                                <Switch
+                                                    classNames={{
+                                                        input: 'switch-input'
+                                                    }}
+                                                    className="hover:cursor-pointer"
+                                                    size="md"
+                                                    checked={maxQuality}
+                                                    onChange={(ev: React.FormEvent<HTMLInputElement>) => setMaxQuality(ev.currentTarget?.checked)} />
+                                            </div>
+                                        </Grid.Col>
+                                        <Grid.Col span={4} className="font-thin text-left">
+                                            Maximum
+                                        </Grid.Col>
+                                        <Grid.Col span={16}>
+                                            <Space h="sm" />
                                         </Grid.Col>
                                     </Grid>
                                 </div>
@@ -379,6 +467,7 @@ export const App: React.FC<{}> = () => {
                 slideshowInterval={slideshowInterval}
                 zoomActivated={zoomActivated}
                 isCover={isCover}
+                maxQuality={maxQuality}
             />
         </>
     );

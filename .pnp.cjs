@@ -57,6 +57,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["svg-gear-generator", "npm:1.1.5"],\
             ["tailwindcss", "virtual:c84e13a1519da29f405a492b4653fdf8193616753c64e3f989da79a295a646d7dee755a5a624f97ce5aaa275de17deded033b6230cf614fddc50ed5b57a3478b#npm:3.1.8"],\
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=f456af"],\
+            ["use-media", "virtual:c84e13a1519da29f405a492b4653fdf8193616753c64e3f989da79a295a646d7dee755a5a624f97ce5aaa275de17deded033b6230cf614fddc50ed5b57a3478b#npm:1.4.0"],\
             ["vite", "virtual:c84e13a1519da29f405a492b4653fdf8193616753c64e3f989da79a295a646d7dee755a5a624f97ce5aaa275de17deded033b6230cf614fddc50ed5b57a3478b#npm:3.0.4"]\
           ],\
           "linkType": "SOFT"\
@@ -3111,6 +3112,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["svg-gear-generator", "npm:1.1.5"],\
             ["tailwindcss", "virtual:c84e13a1519da29f405a492b4653fdf8193616753c64e3f989da79a295a646d7dee755a5a624f97ce5aaa275de17deded033b6230cf614fddc50ed5b57a3478b#npm:3.1.8"],\
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=f456af"],\
+            ["use-media", "virtual:c84e13a1519da29f405a492b4653fdf8193616753c64e3f989da79a295a646d7dee755a5a624f97ce5aaa275de17deded033b6230cf614fddc50ed5b57a3478b#npm:1.4.0"],\
             ["vite", "virtual:c84e13a1519da29f405a492b4653fdf8193616753c64e3f989da79a295a646d7dee755a5a624f97ce5aaa275de17deded033b6230cf614fddc50ed5b57a3478b#npm:3.0.4"]\
           ],\
           "linkType": "SOFT"\
@@ -5240,6 +5242,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react", "npm:18.0.15"],\
             ["react", "npm:18.2.0"],\
             ["use-isomorphic-layout-effect", "virtual:0bc3ba4edbaaab11cdf26367a4c067b868cde59b44977306a7d2a8810fb12c2c9fff1e0f687795d0da2ac875da26e2dabbfd9ae21c01bafb8e20d83a7ade50b7#npm:1.1.2"]\
+          ],\
+          "packagePeers": [\
+            "@types/react",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["use-media", [\
+        ["npm:1.4.0", {\
+          "packageLocation": "./.yarn/cache/use-media-npm-1.4.0-a36f96f9aa-658b10b530.zip/node_modules/use-media/",\
+          "packageDependencies": [\
+            ["use-media", "npm:1.4.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:c84e13a1519da29f405a492b4653fdf8193616753c64e3f989da79a295a646d7dee755a5a624f97ce5aaa275de17deded033b6230cf614fddc50ed5b57a3478b#npm:1.4.0", {\
+          "packageLocation": "./.yarn/__virtual__/use-media-virtual-3247525ed5/0/cache/use-media-npm-1.4.0-a36f96f9aa-658b10b530.zip/node_modules/use-media/",\
+          "packageDependencies": [\
+            ["use-media", "virtual:c84e13a1519da29f405a492b4653fdf8193616753c64e3f989da79a295a646d7dee755a5a624f97ce5aaa275de17deded033b6230cf614fddc50ed5b57a3478b#npm:1.4.0"],\
+            ["@types/react", "npm:18.0.15"],\
+            ["react", "npm:18.2.0"]\
           ],\
           "packagePeers": [\
             "@types/react",\

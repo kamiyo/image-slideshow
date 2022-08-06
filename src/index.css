@@ -93,6 +93,10 @@
     .switch-input {
         @apply hover:cursor-pointer bg-transparent border border-white checked:border-white checked:bg-white checked:before:border-black checked:before:bg-black;
     }
+
+    .quality-button {
+        @apply border border-white hover:bg-white hover:text-black font-sans;
+    }
 }
 
 .loading-enter, .loading-exit-done, .canvas-enter, .ui-layer-enter, .ui-layer-exit-done {

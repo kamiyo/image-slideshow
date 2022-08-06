@@ -28,7 +28,8 @@
     "react-dom": "^18.2.0",
     "react-spinners": "^0.13.4",
     "react-transition-group": "^4.4.5",
-    "svg-gear-generator": "^1.1.5"
+    "svg-gear-generator": "^1.1.5",
+    "use-media": "^1.4.0"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.36",

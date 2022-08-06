@@ -1,0 +1,11 @@
+{
+    "short_name": "JWST Slideshow",
+    "name": "JWST Image Slideshow",
+    "icons": [{
+        "src": "google-touch-favicon.png",
+        "sizes": "512x512"
+    }],
+    "background_color": "#000000",
+    "theme_color": "#FFFFFF",
+    "display": "fullscreen"
+}
